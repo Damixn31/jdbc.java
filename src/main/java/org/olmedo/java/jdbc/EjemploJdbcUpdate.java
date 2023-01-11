@@ -6,10 +6,11 @@ import org.olmedo.java.jdbc.repositorio.ProductoRepositorioImpl;
 import org.olmedo.java.jdbc.repositorio.Repositorio;
 import org.olmedo.java.jdbc.util.ConexionBaseDatos;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Date;
 
-public class EjemploJdbc {
+public class EjemploJdbcUpdate {
     public static void main(String[] args) {
 
         try (Connection conn = ConexionBaseDatos.getInstance()) {
@@ -21,19 +22,20 @@ public class EjemploJdbc {
             System.out.println("============= obtener por id =============");
             System.out.println(repositorio.porId(1L));
 
-            System.out.println("============= insertar nuevo producto =============");
+            System.out.println("============= editar producto =============");
             Producto producto = new Producto();
-            producto.setNombre("Teclado Razer mecanico");
-            producto.setPrecio(550);
-            producto.setFechaRegistro(new Date());
-            Categoria categoria = new Categoria();
-            categoria.setId(3L); // este es del id de computacion de las relacion de categorias
-            producto.setCategoria(categoria);
+            producto.setId(5L);
+            producto.setNombre("Teclado Corsair k95 mecanico");
+            producto.setPrecio(700);
+            Categoria categoria = new Categoria(); // agregamos una nueva categoria
+            categoria.setId(2L); // asinamos la categoria 2 que es la de Tecnologia
+            producto.setCategoria(categoria); // agregamos al producto la categoria
+
             repositorio.guardar(producto);
-            System.out.println("producto guardado con exito");
+            System.out.println("producto editado con exito!");
             repositorio.listar().forEach(System.out::println);
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
     }
 }
